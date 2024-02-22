@@ -1,0 +1,64 @@
+name: Build Nexus Steam Integration DLL
+
+on:
+  workflow_dispatch:
+  push:
+    tags: [ '*' ]
+
+env:
+  CARGO_TERM_COLOR: always
+  CLIENT_DLL_NAME: nexus_steam_integration
+
+jobs:
+  build-lib:
+    name: Build DLL
+    runs-on: windows-latest
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/bin/
+            ~/.cargo/registry/index/
+            ~/.cargo/registry/cache/
+            ~/.cargo/git/db/
+            target/
+          key: ${{ runner.os }}-cargo-${{ hashFiles('**/Cargo.lock') }}
+      - uses: dtolnay/rust-toolchain@stable
+        with:
+          toolchain: stable
+      - name: Build Step
+        run: |
+          cargo build --release
+          cp target\release\build\steamworks-sys-2c1f1d918ad858ab\out\steam_api64.dll target\release\steam_api64.dll
+          cp target\release\build\steamworks-sys-2c1f1d918ad858ab\out\steam_api64.lib target\release\steam_api64.lib
+      - name: Upload Library
+        uses: actions/upload-artifact@v4
+        with:
+          name: ${{ env.CLIENT_DLL_NAME }}
+          path: |
+            target\release\${{ env.CLIENT_DLL_NAME }}.dll
+            target\release\steam_api64.dll
+            target\release\steam_api64.lib
+
+  release:
+    name: Release Binaries
+    runs-on: ubuntu-latest
+    needs: [ build-lib ]
+    permissions:
+      contents: write
+
+    if: ${{ startsWith(github.event.ref, 'refs/tags/') }}
+    steps:
+      - uses: actions/download-artifact@v4
+        name: Download Artifacts
+        with:
+          merge-multiple: true
+      - name: Release Dlls
+        uses: softprops/action-gh-release@v1
+        with:
+          files: |
+            ${{ env.CLIENT_DLL_NAME }}.dll
+            steam_api64.dll
+            steam_api64.lib
