@@ -29,7 +29,7 @@ unsafe extern "C" fn load(api: *mut AddonAPI) {
     match Client::init_app(STEAM_APP_ID) {
         Ok(c) => Some(c),
         Err(err) => {
-            log(ELogLevel::CRITICAL, format!("Unable to initialize steam api: {err}"));
+            log(ELogLevel::WARNING, format!("Unable to initialize steam api: {err}"));
             None
         }
     };
@@ -57,7 +57,7 @@ pub extern "C" fn GetAddonDef() -> *mut AddonDefinition {
         version: AddonVersion {
             major: 1,
             minor: 0,
-            build: 0,
+            build: 1,
             revision: 0,
         },
         author: s!("Zyian").0 as _,

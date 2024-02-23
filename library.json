@@ -1,0 +1,6 @@
+{
+  "id": -50603,
+  "name": "Steam Integration",
+  "description": "Initializes the Steam API to show you are playing GW2 on Steam to track time played.",
+  "download": "https://github.com/mythwright/nexus-steam-integration"
+}
