@@ -1,7 +1,9 @@
 [package]
 name = "nexus-steam-integration"
-version = "1.0.1"
+version = "1.0.2"
 edition = "2021"
+authors = ["Zyian"]
+description = "Initializes the Steam API to show you are playing GW2 on Steam to track time played."
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 [lib]
@@ -9,16 +11,8 @@ crate-type = ["cdylib"]
 name = "nexus_steam_integration"
 
 [dependencies]
-arcdps-imgui = "0.8.0"
-steamworks = { version = "0.11.0", features = ["raw-bindings"] }
+steamworks = { version = "0.11.0" }
 
-[dependencies.nexus-rs]
-git = "https://github.com/belst/raidcore_bindings-rs"
-rev = "423e14136e2adec56ba392e2db4e0e61f8507de5"
-
-[dependencies.windows]
-version = "0.53.0"
-features = ["Win32_System_LibraryLoader", "Win32_Foundation", "Win32_System_SystemServices"]
-
-[target.'cfg(windows)'.build-dependencies]
-winres = "0.1.11"
+[dependencies.nexus]
+git = "https://github.com/Zerthox/nexus-rs.git"
+rev = "fad2c8cfc1aa646b32d68b80858a6323375a95b8"
