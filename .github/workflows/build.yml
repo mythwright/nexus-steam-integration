@@ -31,16 +31,12 @@ jobs:
       - name: Build Step
         run: |
           cargo build --release
-          cp target\release\build\steamworks-sys-2c1f1d918ad858ab\out\steam_api64.dll target\release\steam_api64.dll
-          cp target\release\build\steamworks-sys-2c1f1d918ad858ab\out\steam_api64.lib target\release\steam_api64.lib
       - name: Upload Library
         uses: actions/upload-artifact@v4
         with:
           name: ${{ env.CLIENT_DLL_NAME }}
           path: |
             target\release\${{ env.CLIENT_DLL_NAME }}.dll
-            target\release\steam_api64.dll
-            target\release\steam_api64.lib
 
   release:
     name: Release Binaries
@@ -60,5 +56,3 @@ jobs:
         with:
           files: |
             ${{ env.CLIENT_DLL_NAME }}.dll
-            steam_api64.dll
-            steam_api64.lib
