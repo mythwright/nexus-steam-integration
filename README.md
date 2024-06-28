@@ -1,4 +1,4 @@
-# Nexus Steam Integration
+# Nexus Steam Integration ![GitHub Downloads (all assets, all releases)](https://img.shields.io/github/downloads/mythwright/nexus-steam-integration/total)
 
 Some people love to track their time played through Steam, this is quite easy for those who downloaded
 the game through Steam, but for those who use the standalone client, they might want to track their time as well.
