@@ -149,7 +149,7 @@ dependencies = [
 
 [[package]]
 name = "nexus-steam-integration"
-version = "1.0.3"
+version = "1.0.4"
 dependencies = [
  "nexus",
  "once_cell",

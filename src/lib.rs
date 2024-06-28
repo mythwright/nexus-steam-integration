@@ -1,8 +1,10 @@
+use std::ffi::CStr;
 use std::fs;
 use std::fs::File;
 use std::io::Write;
+use std::os::raw::c_char;
 use std::path::PathBuf;
-use std::ptr::addr_of_mut;
+use std::ptr::{addr_of, addr_of_mut};
 use nexus::{AddonFlags, log, paths, UpdateProvider};
 use nexus::alert::alert_notify;
 use sharedlib::{Func, Lib, Symbol};
@@ -77,17 +79,27 @@ fn load() {
         return;
     }
 
-    let init_symbol: Func<extern "C" fn() -> SteamInitResult> = unsafe { grab_global().find_func("SteamAPI_InitFlat").unwrap()};
+    let err_buffer: SteamErrMsg = [0; 1024];
+    let err_buffer_ptr = addr_of!(err_buffer);
+    let init_symbol: Func<extern "C" fn(*const SteamErrMsg) -> SteamInitResult> = unsafe { grab_global().find_func("SteamAPI_InitFlat").unwrap()};
     let init_func = unsafe { init_symbol.get() };
-
-    let res = init_func();
+    
+    let res = init_func(err_buffer_ptr);
     log::log(
         log::LogLevel::Debug,
         "Steam Integration",
         format!("Init Steam SDK result {:?}", res),
     );
+    
+    // log::log(
+    //     log::LogLevel::Debug,
+    //     "Steam Integration",
+    //     format!("Steam Err Buffer {:?}", err_buffer),
+    // );
 
 }
+
+type SteamErrMsg = [c_char; 1024];
 
 fn unload() {
     let steam = grab_global();

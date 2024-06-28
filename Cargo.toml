@@ -1,6 +1,6 @@
 [package]
 name = "nexus-steam-integration"
-version = "1.0.3"
+version = "1.0.4"
 edition = "2021"
 authors = ["Zyian"]
 description = "Initializes the Steam API to show you are playing GW2 on Steam to track time played."
